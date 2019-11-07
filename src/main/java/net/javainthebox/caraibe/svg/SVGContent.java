@@ -7,17 +7,26 @@ import javafx.scene.Node;
 
 /**
  * SVGContent express SVG content.
- * <p>SVGContent has a root group. The root is a Group object, therefore is able to be added to scene graph:</p>
+ * <p>
+ * SVGContent has a root group. The root is a Group object, therefore is able to be added to scene
+ * graph:
+ * </p>
  * 
- * <pre> 
+ * <pre>
+ *  
     URL url = ...;
     SVGContent content = SVGLoader.load(url);
  
-    container.getChildren().add(content.getRoot());</pre>
+    container.getChildren().add(content.getRoot());
+ * </pre>
+ * <p>
+ * getNode() method returns Node object represented by ID. When loading following SVG file,
+ * Rectangle object is gotten by getNode() method.
+ * </p>
+ * <p>
+ * rectangle.svg
+ * </p>
  * 
- * <p>getNode() method returns Node object represented by ID. When loading following SVG file, Rectangle object is gotten by getNode() method.</p>
- * 
- * <p>rectangle.svg</p>
  * <pre>
  &lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
  &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;
@@ -34,15 +43,22 @@ import javafx.scene.Node;
          style="fill:#FFFFFF; stroke:#000000;"/&gt;
 &lt;/svg&gt;
  * </pre>
+ * <p>
+ * Java code is follows:
+ * </p>
  * 
- * <p>Java code is follows:</p>
  * <pre>
-    SVGContent content = SVGLoader.load("rectangle.svg");
-    Rectangle rect = (Rectangle) content.getNode("rect");
+ * SVGContent content = SVGLoader.load("rectangle.svg");
+ * Rectangle rect = (Rectangle) content.getNode("rect");
  * </pre>
+ * <p>
+ * getGroup() method returns Group object represented by ID. When loading following SVG file, Group
+ * object is gotten by getNode() method.
+ * </p>
+ * <p>
+ * group.svg
+ * </p>
  * 
- * <p>getGroup() method returns Group object represented by ID. When loading following SVG file, Group object is gotten by getNode() method.</p>
- * <p>group.svg</p>
  * <pre>
 &lt;?xml version="1.0" encoding="iso-8859-1"?&gt;
 &lt;!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"&gt;
@@ -55,47 +71,51 @@ import javafx.scene.Node;
   &lt;/g&gt;
 &lt;/svg&gt;
  * </pre>
+ * <p>
+ * Java code is follows:
+ * </p>
  * 
- * <p>Java code is follows:</p>
  * <pre>
-    SVGContent content = SVGLoader.load("group.svg");
-    Group group = content.getGroup("group");
+ * SVGContent content = SVGLoader.load("group.svg");
+ * Group group = content.getGroup("group");
  * </pre>
  *
  * note: There are many unsupport SVG element.
- * 
  */
-public class SVGContent extends Group {
-    private Map<String, Node> nodes = new HashMap<>();
-    private Map<String, Group> groups = new HashMap<>();
-    
-    void putNode(String id, Node node) {
-        nodes.put(id, node);
-    }
+public class SVGContent extends Group
+{
+   private Map<String, Node> nodes = new HashMap<>();
+   private Map<String, Group> groups = new HashMap<>();
 
-    /**
-     * Gets node object indicated by id.
-     * When there is no node indicated by id, return null.
-     * 
-     * @param id the name of node
-     * @return node  represented by id
-     */
-    public Node getNode(String id) {
-        return nodes.get(id);
-    }
-    
-    void putGroup(String id, Group group) {
-        groups.put(id, group);
-    }
+   void putNode(String id, Node node)
+   {
+      nodes.put(id, node);
+   }
 
-    /**
-     * Gets group object indicated by id.
-     * When there is no group indicated by id, return null.
-     * 
-     * @param id the name of group
-     * @return group represented by id
-     */
-    public Group getGroup(String id) {
-        return groups.get(id);
-    }
+   /**
+    * Gets node object indicated by id. When there is no node indicated by id, return null.
+    * 
+    * @param id the name of node
+    * @return node represented by id
+    */
+   public Node getNode(String id)
+   {
+      return nodes.get(id);
+   }
+
+   void putGroup(String id, Group group)
+   {
+      groups.put(id, group);
+   }
+
+   /**
+    * Gets group object indicated by id. When there is no group indicated by id, return null.
+    * 
+    * @param id the name of group
+    * @return group represented by id
+    */
+   public Group getGroup(String id)
+   {
+      return groups.get(id);
+   }
 }
