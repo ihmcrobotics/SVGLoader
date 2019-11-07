@@ -157,6 +157,8 @@ public class SVGContentBuilder
                if (idAttribute != null)
                {
                   root.putNode(idAttribute.getValue(), node);
+                  if (node instanceof Group)
+                     root.putGroup(idAttribute.getValue(), (Group) node);
                }
                group.getChildren().add(node);
             }
@@ -738,7 +740,7 @@ public class SVGContentBuilder
             String styleName = tokenizer2.nextToken();
             String styleValue = tokenizer2.nextToken();
 
-            switch (styleName)
+            switch (styleName.trim())
             {
                case "fill":
                   shape.setFill(expressPaint(styleValue));
@@ -766,6 +768,13 @@ public class SVGContentBuilder
                   }
 
                   shape.setStrokeLineCap(linecap);
+                  break;
+               case "stroke-dasharray":
+                  String[] values = styleValue.split(",");
+                  for (String value : values)
+                  {
+                     shape.getStrokeDashArray().add(Double.parseDouble(value));
+                  }
                   break;
                case "stroke-miterlimit":
                   double miterLimit = Double.parseDouble(styleValue);
