@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.xml.stream.XMLStreamException;
 
 /**
@@ -32,8 +33,6 @@ public class SVGLoader
     */
    public static SVGContent load(String url)
    {
-      SVGContent root = null;
-
       URL tempUrl = null;
       try
       {
@@ -51,21 +50,25 @@ public class SVGLoader
             catch (final MalformedURLException ex1)
             {
                Logger.getLogger(SVGLoader.class.getName()).log(Level.SEVERE, null, ex1);
-               return root;
+               return null;
             }
          }
       }
 
-      SVGContentBuilder builder = new SVGContentBuilder(tempUrl);
+      return load(tempUrl);
+   }
+
+   public static SVGContent load(URL url)
+   {
+      SVGContentBuilder builder = new SVGContentBuilder(url);
       try
       {
-         root = builder.build();
+         return builder.build();
       }
       catch (IOException | XMLStreamException ex)
       {
          Logger.getLogger(SVGLoader.class.getName()).log(Level.SEVERE, null, ex);
+         return null;
       }
-
-      return root;
    }
 }
