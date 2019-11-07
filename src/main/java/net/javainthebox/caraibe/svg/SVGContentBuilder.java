@@ -12,6 +12,17 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -36,11 +47,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.*;
 
 public class SVGContentBuilder
 {
@@ -129,6 +135,9 @@ public class SVGContentBuilder
                   break;
                case "radialGradient":
                   buildRadialGradient(reader, element);
+                  break;
+               case "title":
+                  group.setId(reader.getElementText());
                   break;
                default:
                   Logger.getLogger(SVGContentBuilder.class.getName()).log(Level.INFO, "Non Support Element: {0}", element);
@@ -629,7 +638,16 @@ public class SVGContentBuilder
          }
          else if (transformTxt.startsWith("rotate("))
          {
-            throw new UnsupportedOperationException("Transform:Rotate");
+            transformTxt = transformTxt.substring(7);
+            String[] components = transformTxt.split("[^0-9]+");
+            if (components.length == 1)
+            {
+               transform = Transform.rotate(Double.parseDouble(components[0]), 0.0, 0.0);
+            }
+            else
+            {
+               transform = Transform.rotate(Double.parseDouble(components[0]), Double.parseDouble(components[1]), Double.parseDouble(components[2]));
+            }
          }
          else if (transformTxt.startsWith("skewX("))
          {
